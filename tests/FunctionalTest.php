@@ -2,17 +2,18 @@
 
 namespace Tests\Prophecy;
 
+use Fixtures\Prophecy\ReturningFinalClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Doubler\DoubleInterface;
+use Prophecy\Exception\Prophecy\MethodProphecyException;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 use Prophecy\Prophet;
 
 class FunctionalTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function case_insensitive_method_names()
+    #[Test]
+    public function case_insensitive_method_names(): void
     {
         $prophet = new Prophet();
         $prophecy = $prophet->prophesize('ArrayObject');
@@ -26,10 +27,8 @@ class FunctionalTest extends TestCase
         self::assertSame(3, $arrayObject->offsetGet(3));
     }
 
-    /**
-     * @test
-     */
-    public function it_implements_the_double_interface()
+    #[Test]
+    public function it_implements_the_double_interface(): void
     {
         $prophet = new Prophet();
         $object = $prophet->prophesize('stdClass')->reveal();
@@ -37,14 +36,27 @@ class FunctionalTest extends TestCase
         $this->assertInstanceOf(DoubleInterface::class, $object);
     }
 
-    /**
-     * @test
-     */
-    public function it_implements_the_prophecy_subject_interface()
+    #[Test]
+    public function it_implements_the_prophecy_subject_interface(): void
     {
         $prophet = new Prophet();
         $object = $prophet->prophesize('stdClass')->reveal();
 
         $this->assertInstanceOf(ProphecySubjectInterface::class, $object);
+    }
+
+    public function testUnconfiguredFinalReturnType(): void
+    {
+        $prophet = new Prophet();
+        $object = $prophet->prophesize(ReturningFinalClass::class);
+
+        $object->doSomething()->shouldBeCalled();
+
+        $double = $object->reveal();
+
+        $this->expectException(MethodProphecyException::class);
+        $this->expectExceptionMessage('Cannot create a return value for the method. Configure an explicit return value instead.');
+
+        $double->doSomething();
     }
 }

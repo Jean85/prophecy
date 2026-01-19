@@ -15,20 +15,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ["7.4", "8.0", "8.1", "8.2", "8.3"]
+        php: ["8.2", "8.3", "8.4"]
         composer-flags: [ "" ]
         experimental: [ false ]
         include:
-          - php: 7.4
+          - php: 8.2
             composer-flags: "--prefer-lowest"
-          - php: "8.4" # TODO move that to a normal job once phpspec supports PHP 8.4
+          - php: "8.5" # TODO move that to a normal job once phpspec supports PHP 8.5
             composer-flags: "--ignore-platform-req=php+"
           - php: nightly
             composer-flags: "--ignore-platform-req=php+"
             experimental: true
 
     steps:
-      -   uses: actions/checkout@v4
+      -   uses: actions/checkout@v5
 
       -   name: Set up PHP
           uses: shivammathur/setup-php@v2
@@ -55,11 +55,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Static analysis
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
       - name: Install dependencies
         run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
@@ -69,11 +69,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Coding standards
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "8.3"
           coverage: none
       - name: Install dependencies
         run: COMPOSER_ROOT_VERSION=dev-master composer update --no-scripts
