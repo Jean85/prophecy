@@ -26,9 +26,16 @@
         "symfony/deprecation-contracts":     "^2.5 || ^3.1"
     },
 
+    "repositories": [
+        {
+            "url": "https://github.com/Jean85/phpspec.git",
+            "type": "vcs"
+        }
+    ],
+
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.88",
-        "phpspec/phpspec": "^6.0 || ^7.0 || ^8.0",
+        "phpspec/phpspec": "^6.0 || ^7.0 || ^8.0 || dev-allow-phpunit-13 as 8.2.1",
         "phpstan/phpstan": "^2.1.13, <=2.1.33",
         "phpunit/phpunit": "^11.0 || ^12.0 || ^13.0"
     },
